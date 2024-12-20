@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -12,15 +13,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float xMin = -4.2f, xMax = 4.4f; 
     [SerializeField] private float zMin = -6f, zMax = 0f;
 
+    [SerializeField] float timeInBetweenBullets = 0.5f;
+
+    bool stopCoroutine;
+    bool isFiring;
+
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !isFiring)
         {
+            isFiring = true;
+            stopCoroutine = false;
+            StartCoroutine(Fire());
            
-          GameObject o=  Instantiate(bullet,firePosition);
+          
+           
+        }
 
-            o.transform.parent = null;
-           
+        if (Input.GetKeyUp(KeyCode.Space)) 
+        {
+            stopCoroutine= true;
+            isFiring= false;
         }
        
         float horizontal = Input.GetAxis("Horizontal"); 
@@ -43,7 +56,27 @@ public class PlayerMovement : MonoBehaviour
         transform.position = new Vector3(clampedX, transform.position.y, clampedZ);
     }
 
+    private IEnumerator Fire()
+    {
+        if (stopCoroutine ) { yield break; }
 
+        while (isFiring) 
+        {
+            GameObject o = Instantiate(bullet, firePosition);
+
+            o.transform.parent = null;
+            yield return new WaitForSeconds(timeInBetweenBullets);
+        }
+
+      
+
+
+      
+
+  
+
+        StartCoroutine(Fire());
+    }
    
 
 }
