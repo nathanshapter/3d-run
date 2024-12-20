@@ -43,7 +43,12 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < amountOfCubesToActivate; i++)
         {
-            enemyCubePool[Random.Range(0,enemyCubePool.Length)].gameObject.SetActive(true);
+            int o = Random.Range(0, enemyCubePool.Length); 
+
+            enemyCubePool[o].gameObject.SetActive(true);
+            enemyCubePool[o].gameObject.transform.position = spawnPoints[ChooseSpawnParent()].transform.position;
+
+            
         }
 
 

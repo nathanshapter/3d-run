@@ -7,7 +7,8 @@ public class EnemyHealth : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet")) 
 
         {
-            print("that shits real bro");
+            Destroy(collision.gameObject);
+            this.gameObject.SetActive(false);
         }
     }
 }
