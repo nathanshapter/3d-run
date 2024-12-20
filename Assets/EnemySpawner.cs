@@ -1,16 +1,55 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+   [SerializeField] Transform[] spawnPoints;
+
+
+   [SerializeField] GameObject enemyCube;
+
+  [SerializeField]  private GameObject[] enemyCubePool;
+    [SerializeField] int spawnCount;
+
+
+    private void Start()
     {
-        
+        enemyCubePool = new GameObject[spawnCount];
+
+
+        for (int i = 0; i < spawnCount; i++)
+        {
+            GameObject o = Instantiate(enemyCube, spawnPoints[ChooseSpawnParent()]);
+            o.SetActive(false);
+            enemyCubePool[i] = o;
+        }
+             StartCoroutine(ActivateCubes());   
     }
 
-    // Update is called once per frame
-    void Update()
+    int ChooseSpawnParent()
     {
-        
+        int i = Random.Range(0, spawnPoints.Length);
+        return i;
     }
+
+    private IEnumerator ActivateCubes()
+    {
+        yield return new WaitForSeconds(Random.Range(0.1f, 0.7f));
+
+       int amountOfCubesToActivate = Random.Range(1, 4); // spawn between 1-3 of them
+
+        
+
+
+        for (int i = 0; i < amountOfCubesToActivate; i++)
+        {
+            enemyCubePool[Random.Range(0,enemyCubePool.Length)].gameObject.SetActive(true);
+        }
+
+
+       StartCoroutine(ActivateCubes());
+
+
+    }
+
 }
